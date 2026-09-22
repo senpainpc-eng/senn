@@ -2,12 +2,11 @@
    STYLE KATALOG HAYAT - TEMA BUKU GRAMEDIA & SKETSA MONOKROM
    ========================================================= */
 
-/* 1. Pattern Latar Belakang Kertas Vintage */
+/* Pattern Latar Belakang Kertas Vintage */
 .bg-paper-pattern {
   background-color: #f6f3eb;
   background-image: radial-gradient(#d4cebf 0.75px, transparent 0.75px);
   background-size: 16px 16px;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .dark .bg-paper-pattern {
@@ -16,11 +15,11 @@
   background-size: 16px 16px;
 }
 
-/* 2. Bingkai Kotak Sketsa Monokrom */
+/* Bingkai Kotak Sketsa Monokrom */
 .sketch-box {
   border: 2px solid #27272a;
   box-shadow: 4px 4px 0px 0px #27272a;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .dark .sketch-box {
@@ -28,10 +27,9 @@
   box-shadow: 4px 4px 0px 0px #e4e4e7;
 }
 
-/* 3. Tombol Gaya Sketsa & Efek Tekan (Press Effect) */
+/* Tombol Gaya Sketsa & Efek Tekan */
 .sketch-btn {
   transition: all 0.15s ease-in-out;
-  cursor: pointer;
 }
 
 .sketch-btn:hover {
@@ -52,10 +50,9 @@
   box-shadow: 1px 1px 0px 0px #e4e4e7;
 }
 
-/* 4. Custom Scrollbar Gaya Buku Classic */
+/* Custom Scrollbar Gaya Buku Classic */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -73,40 +70,4 @@
 
 .dark ::-webkit-scrollbar-thumb {
   background: #e4e4e7;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #52525b;
-}
-
-/* 5. Efek Blok Teks (Text Selection) - Seperti Stabilo Vintage */
-::selection {
-  background-color: #fde047; /* Kuning stabilo */
-  color: #18181b;
-}
-
-.dark ::selection {
-  background-color: #a1a1aa;
-  color: #09090b;
-}
-
-/* 6. Animasi Muncunya Memo Baru (Real-time Fade-in) */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* 7. Fokus Input Bergaya Pensil/Sketsa */
-input:focus, textarea:focus {
-  outline: none;
 }
