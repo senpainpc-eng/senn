@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sen_Molly</title>
-  
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,6 @@
 
   <!-- Style CSS Terpisah -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- Firebase SDK (Versi Compatibility JS) -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <script>
     tailwind.config = {
@@ -40,7 +36,7 @@
   <!-- STICKY HEADER NAVIGATION -->
   <header class="sticky top-0 z-50 bg-amber-50/90 dark:bg-zinc-950/90 backdrop-blur-md border-b-2 border-zinc-800 dark:border-zinc-200 py-3 px-4 shadow-sm">
     <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
-      
+
       <!-- Logo / Book Tag -->
       <a href="#bab0" class="flex items-center gap-2 group">
         <div class="w-8 h-8 border-2 border-zinc-900 dark:border-zinc-100 flex items-center justify-center font-bold font-mono text-sm group-hover:bg-zinc-900 group-hover:text-amber-50 dark:group-hover:bg-zinc-100 dark:group-hover:text-zinc-900 transition-colors">
@@ -136,7 +132,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
+
         <!-- Instagram -->
         <div class="sketch-box p-5 bg-amber-50/60 dark:bg-zinc-900/60 flex flex-col justify-between">
           <div>
@@ -278,7 +274,7 @@
 
       <!-- SIDE-BY-SIDE GRID -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-        
+
         <!-- SISI KIRI: FORM KIRIM SURAT -->
         <div class="sketch-box p-6 bg-amber-50/80 dark:bg-zinc-900/80 relative">
           <div class="absolute -top-3 left-6 px-3 bg-amber-100 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold">
@@ -325,11 +321,10 @@
           </div>
         </div>
 
-        <!-- SISI KANAN: CORETAN MEMO PINGGIR (TERBAGI ONLINE) -->
+        <!-- SISI KANAN: CORETAN MEMO PINGGIR -->
         <div class="sketch-box p-6 bg-amber-100/60 dark:bg-zinc-900/90 relative">
-          <div class="absolute -top-3 left-6 px-3 bg-amber-200 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            &pen; CORETAN MEMO LIVE
+          <div class="absolute -top-3 left-6 px-3 bg-amber-200 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold">
+            &pen; CORETAN MEMO PINGGIR
           </div>
 
           <div class="flex items-center justify-between mb-4 mt-2">
@@ -339,13 +334,12 @@
               </svg>
               Memo Margin Buku
             </h3>
-            <span class="font-hand text-lg text-zinc-600 dark:text-zinc-400 rotate-[-3deg]">*terbagikan publik</span>
+            <span class="font-hand text-lg text-zinc-600 dark:text-zinc-400 rotate-[-3deg]">*coretan pembaca</span>
           </div>
 
-          <!-- Input Memo Baru dengan Nama -->
-          <div class="mb-6 p-3 bg-amber-50 dark:bg-zinc-800/80 border border-dashed border-zinc-700 dark:border-zinc-400 space-y-2">
-            <label class="block font-mono text-xs font-bold uppercase">Tulis Coretan (Terlihat oleh pembaca lain):</label>
-            <input type="text" id="memoAuthorInput" placeholder="Nama / Alias Anda (opsional)..." class="w-full p-2 bg-transparent border border-zinc-500 dark:border-zinc-400 font-mono text-xs focus:outline-none">
+          <!-- Input Memo Baru -->
+          <div class="mb-6 p-3 bg-amber-50 dark:bg-zinc-800/80 border border-dashed border-zinc-700 dark:border-zinc-400">
+            <label class="block font-mono text-xs font-bold uppercase mb-1">Tulis Coretan Singkat Anda:</label>
             <div class="flex gap-2">
               <input type="text" id="newMemoInput" placeholder="Ketik catatan di pinggir halaman..." class="flex-1 p-2 bg-transparent border border-zinc-600 dark:border-zinc-300 font-hand text-xl focus:outline-none">
               <button onclick="addMarginMemo()" class="sketch-btn px-4 py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold">
@@ -356,8 +350,7 @@
 
           <!-- Container Memo -->
           <div id="memoContainer" class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-            <!-- Disisipkan otomatis via JavaScript / Firebase -->
-            <div class="text-center font-mono text-xs text-zinc-500 py-4">Memuat catatan pembaca...</div>
+            <!-- Disisipkan otomatis via JavaScript -->
           </div>
         </div>
 
@@ -373,9 +366,9 @@
     </div>
   </footer>
 
-  <!-- JAVASCRIPT TERPERBARUI -->
+  <!-- JAVASCRIPT -->
   <script>
-    // 1. Theme Toggle
+    // 1. Theme Toggle (Saved in LocalStorage)
     function applyTheme(isDark) {
       if (isDark) {
         document.documentElement.classList.add('dark');
@@ -403,19 +396,25 @@
       }
     })();
 
-    // 2. Handle Kirim Surat
+    // Handle Kirim Surat langsung ke senpainpc@gmail.com
     function handleSendLetter(e) {
       e.preventDefault();
-      
+
       const name = document.getElementById('senderName').value;
       const email = document.getElementById('senderEmail').value;
       const subject = document.getElementById('letterSubject').value;
       const body = document.getElementById('letterBody').value;
 
+      // Format isi email
       const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
+
+      // URL Mailto mengarah ke senpainpc@gmail.com
       const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
 
+      // Buka aplikasi email pengguna
       window.location.href = mailtoUrl;
+
+      // Tampilkan notifikasi
       showToast(`Aplikasi email telah dibuka untuk mengirimkan surat ke senpainpc@gmail.com!`);
       document.getElementById('letterForm').reset();
     }
@@ -431,119 +430,85 @@
       document.getElementById('toastNotification').classList.add('hidden');
     }
 
-  // 1. Inisialisasi Firebase
-  const firebaseConfig = {
-    // GANTI URL DI BAWAH SESUAI DENGAN URL DATABASE FIREBASE ANDA:
-    databaseURL: "https://senn-molly-default-rtdb.asia-southeast1.firebasedatabase.app"
-  };
+    // 3. Margin Memo Logic
+    const defaultMemos = [
+      { id: 1, text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
+      { id: 2, text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
+      { id: 3, text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
+    ];
 
-  let memoRef = null;
-  let currentMemos = [];
-
-  // Inisialisasi Aplikasi Firebase
-  try {
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const database = firebase.database();
-    memoRef = database.ref('public_memos');
-
-    // Menerima update memo secara Real-time dari Firebase
-    memoRef.on('value', (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        // Ubah objek dari Firebase menjadi array
-        currentMemos = Object.keys(data).map(key => ({
-          id: key,
-          ...data[key]
-        })).reverse(); // Urutkan dari yang terbaru
-      } else {
-        currentMemos = [];
-      }
-      renderMemos(currentMemos);
-    }, (error) => {
-      console.error("Gagal mengambil data dari Firebase:", error);
-    });
-  } catch (err) {
-    console.error("Firebase Error:", err);
-  }
-
-  // 2. Fungsi Menampilkan Memo ke Layar
-  function renderMemos(memosList) {
-    const container = document.getElementById('memoContainer');
-    if (!container) return;
-    container.innerHTML = '';
-
-    if (!memosList || memosList.length === 0) {
-      container.innerHTML = `<div class="text-center font-mono text-xs text-zinc-500 py-4">Belum ada memo. Tulis catatan pertama Anda di atas!</div>`;
-      return;
+    function getStoredMemos() {
+      const saved = localStorage.getItem('margin_memos');
+      return saved ? JSON.parse(saved) : defaultMemos;
     }
 
-    memosList.forEach((memo) => {
-      const memoDiv = document.createElement('div');
-      memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform animate-fadeIn";
-      
-      memoDiv.innerHTML = `
-        <div class="flex items-start justify-between gap-2">
-          <div class="font-hand text-xl text-zinc-900 dark:text-zinc-100 leading-snug">
-            "${escapeHtml(memo.text)}"
+    function renderMemos() {
+      const memos = getStoredMemos();
+      const container = document.getElementById('memoContainer');
+      container.innerHTML = '';
+
+      memos.forEach((memo) => {
+        const memoDiv = document.createElement('div');
+        memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform";
+
+        memoDiv.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div class="font-hand text-xl text-zinc-900 dark:text-zinc-100 leading-snug">
+              "${escapeHtml(memo.text)}"
+            </div>
+            <button onclick="deleteMemo(${memo.id})" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
           </div>
-          <button onclick="deleteMemo('${memo.id}')" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
-        </div>
-        <div class="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-500 dark:text-zinc-400 border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-1">
-          <span>&pen; ${escapeHtml(memo.author || 'Pembaca')}</span>
-          <span>${escapeHtml(memo.time || '')}</span>
-        </div>
-      `;
-      container.appendChild(memoDiv);
-    });
-  }
-
-  // 3. Fungsi Tambah Memo Baru
-  function addMarginMemo() {
-    const textInput = document.getElementById('newMemoInput');
-    const authorInput = document.getElementById('memoAuthorInput');
-    
-    const text = textInput.value.trim();
-    const author = authorInput.value.trim() || "Pembaca";
-
-    if (!text) return;
-
-    const now = new Date();
-    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
-
-    // Simpan ke Firebase
-    if (memoRef) {
-      memoRef.push({
-        text: text,
-        author: author,
-        time: timeStr,
-        timestamp: Date.now()
-      }).then(() => {
-        textInput.value = '';
-      }).catch((err) => {
-        alert("Gagal mengirim memo. Pastikan Rules Firebase sudah diubah ke true.");
-        console.error(err);
+          <div class="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-500 dark:text-zinc-400 border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-1">
+            <span>&pen; ${escapeHtml(memo.author || 'Pembaca')}</span>
+            <span>${memo.time}</span>
+          </div>
+        `;
+        container.appendChild(memoDiv);
       });
-    } else {
-      alert("Firebase belum terhubung!");
     }
-  }
 
-  // 4. Fungsi Hapus Memo
-  function deleteMemo(id) {
-    if (memoRef && id) {
-      memoRef.child(id).remove();
+    function addMarginMemo() {
+      const input = document.getElementById('newMemoInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const memos = getStoredMemos();
+      const now = new Date();
+      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
+
+      const newMemo = {
+        id: Date.now(),
+        text: text,
+        time: timeStr,
+        author: "Pembaca Baru"
+      };
+
+      memos.unshift(newMemo);
+      localStorage.setItem('margin_memos', JSON.stringify(memos));
+      input.value = '';
+      renderMemos();
     }
-  }
 
-  // Helper untuk mengamankan teks dari XSS
-  function escapeHtml(text) {
-    if (!text) return '';
-    return String(text).replace(/[&<>"']/g, function(m) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
-    });
-  }
-</script>
+    function deleteMemo(id) {
+      let memos = getStoredMemos();
+      memos = memos.filter(m => m.id !== id);
+      localStorage.setItem('margin_memos', JSON.stringify(memos));
+      renderMemos();
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/[&<>"']/g, function(m) {
+        return {
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          '"': '&quot;',
+          "'": '&#039;'
+        }[m];
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderMemos);
+  </script>
 </body>
 </html>
