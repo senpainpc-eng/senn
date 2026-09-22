@@ -16,9 +16,9 @@
   <!-- Style CSS Terpisah -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Firebase SDK untuk Sinkronisasi Memo antar Pembaca -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <!-- Firebase SDK (Versi Compatibility JS) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
   <script>
     tailwind.config = {
@@ -431,157 +431,119 @@
       document.getElementById('toastNotification').classList.add('hidden');
     }
 
-    // 3. SINKRONISASI MEMO LIVE (FIREBASE + LOCALSTORAGE FALLBACK)
-    const firebaseConfig = {
-      databaseURL: "https://sen-molly-memos-default-rtdb.asia-southeast1.firebasedatabase.app"
-    };
+  // 1. Inisialisasi Firebase
+  const firebaseConfig = {
+    // GANTI URL DI BAWAH SESUAI DENGAN URL DATABASE FIREBASE ANDA:
+    databaseURL: "https://senn-molly-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
 
-    let memoRef = null;
-    let currentMemos = [];
+  let memoRef = null;
+  let currentMemos = [];
 
-    // Muat data lokal terlebih dahulu agar tampilan cepat
-    loadLocalMemos();
+  // Inisialisasi Aplikasi Firebase
+  try {
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const database = firebase.database();
+    memoRef = database.ref('public_memos');
 
-    try {
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
+    // Menerima update memo secara Real-time dari Firebase
+    memoRef.on('value', (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        // Ubah objek dari Firebase menjadi array
+        currentMemos = Object.keys(data).map(key => ({
+          id: key,
+          ...data[key]
+        })).reverse(); // Urutkan dari yang terbaru
+      } else {
+        currentMemos = [];
       }
-      const database = firebase.database();
-      memoRef = database.ref('public_memos');
-
-      // Mendengarkan perubahan memo secara Real-time dari Firebase
-      memoRef.on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const firebaseMemos = Object.keys(data).map(key => ({
-            id: key,
-            ...data[key]
-          })).reverse();
-          
-          currentMemos = firebaseMemos;
-          saveLocalBackup(currentMemos);
-          renderMemos(currentMemos);
-        }
-      }, (error) => {
-        console.warn("Firebase dikunci/offline. Menggunakan mode lokal:", error);
-      });
-    } catch (err) {
-      console.warn("Gagal terhubung ke Firebase:", err);
-    }
-
-    function getDefaultMemos() {
-      return [
-        { id: "def_1", text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
-        { id: "def_2", text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
-        { id: "def_3", text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
-      ];
-    }
-
-    function loadLocalMemos() {
-      const saved = localStorage.getItem('margin_memos');
-      currentMemos = saved ? JSON.parse(saved) : getDefaultMemos();
       renderMemos(currentMemos);
+    }, (error) => {
+      console.error("Gagal mengambil data dari Firebase:", error);
+    });
+  } catch (err) {
+    console.error("Firebase Error:", err);
+  }
+
+  // 2. Fungsi Menampilkan Memo ke Layar
+  function renderMemos(memosList) {
+    const container = document.getElementById('memoContainer');
+    if (!container) return;
+    container.innerHTML = '';
+
+    if (!memosList || memosList.length === 0) {
+      container.innerHTML = `<div class="text-center font-mono text-xs text-zinc-500 py-4">Belum ada memo. Tulis catatan pertama Anda di atas!</div>`;
+      return;
     }
 
-    function saveLocalBackup(memos) {
-      localStorage.setItem('margin_memos', JSON.stringify(memos));
-    }
-
-    function renderMemos(memosList) {
-      const container = document.getElementById('memoContainer');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (!memosList || memosList.length === 0) {
-        container.innerHTML = `<div class="text-center font-mono text-xs text-zinc-500 py-4">Belum ada coretan memo. Jadilah yang pertama mencoret!</div>`;
-        return;
-      }
-
-      memosList.forEach((memo) => {
-        const memoDiv = document.createElement('div');
-        memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform animate-fadeIn";
-        
-        memoDiv.innerHTML = `
-          <div class="flex items-start justify-between gap-2">
-            <div class="font-hand text-xl text-zinc-900 dark:text-zinc-100 leading-snug">
-              "${escapeHtml(memo.text)}"
-            </div>
-            <button onclick="deleteMemo('${memo.id}')" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
-          </div>
-          <div class="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-500 dark:text-zinc-400 border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-1">
-            <span>&pen; ${escapeHtml(memo.author || 'Pembaca')}</span>
-            <span>${escapeHtml(memo.time || '')}</span>
-          </div>
-        `;
-        container.appendChild(memoDiv);
-      });
-    }
-
-    // Fungsi Tambah Memo (Langsung Tampil di Layar)
-    function addMarginMemo() {
-      const textInput = document.getElementById('newMemoInput');
-      const authorInput = document.getElementById('memoAuthorInput');
+    memosList.forEach((memo) => {
+      const memoDiv = document.createElement('div');
+      memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform animate-fadeIn";
       
-      const text = textInput.value.trim();
-      const author = authorInput.value.trim() || "Pembaca";
+      memoDiv.innerHTML = `
+        <div class="flex items-start justify-between gap-2">
+          <div class="font-hand text-xl text-zinc-900 dark:text-zinc-100 leading-snug">
+            "${escapeHtml(memo.text)}"
+          </div>
+          <button onclick="deleteMemo('${memo.id}')" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
+        </div>
+        <div class="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-500 dark:text-zinc-400 border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-1">
+          <span>&pen; ${escapeHtml(memo.author || 'Pembaca')}</span>
+          <span>${escapeHtml(memo.time || '')}</span>
+        </div>
+      `;
+      container.appendChild(memoDiv);
+    });
+  }
 
-      if (!text) return;
+  // 3. Fungsi Tambah Memo Baru
+  function addMarginMemo() {
+    const textInput = document.getElementById('newMemoInput');
+    const authorInput = document.getElementById('memoAuthorInput');
+    
+    const text = textInput.value.trim();
+    const author = authorInput.value.trim() || "Pembaca";
 
-      const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
+    if (!text) return;
 
-      const newMemo = {
-        id: 'memo_' + Date.now(),
+    const now = new Date();
+    const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
+
+    // Simpan ke Firebase
+    if (memoRef) {
+      memoRef.push({
         text: text,
         author: author,
         time: timeStr,
         timestamp: Date.now()
-      };
-
-      // 1. Langsung tampilkan di layar pengguna seketika
-      currentMemos.unshift(newMemo);
-      renderMemos(currentMemos);
-      saveLocalBackup(currentMemos);
-
-      // 2. Kirim ke Firebase di latar belakang
-      if (memoRef) {
-        memoRef.push({
-          text: text,
-          author: author,
-          time: timeStr,
-          timestamp: Date.now()
-        }).catch((err) => {
-          console.warn("Gagal menyimpan ke Firebase (Akses ditolak):", err);
-        });
-      }
-
-      textInput.value = '';
-    }
-
-    function deleteMemo(id) {
-      // Hapus dari daftar lokal
-      currentMemos = currentMemos.filter(m => m.id !== id);
-      saveLocalBackup(currentMemos);
-      renderMemos(currentMemos);
-
-      // Hapus dari Firebase jika terhubung
-      if (memoRef && !id.startsWith('def_') && !id.startsWith('memo_')) {
-        memoRef.child(id).remove().catch(() => {});
-      }
-    }
-
-    function escapeHtml(text) {
-      if (!text) return '';
-      return String(text).replace(/[&<>"']/g, function(m) {
-        return {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#039;'
-        }[m];
+      }).then(() => {
+        textInput.value = '';
+      }).catch((err) => {
+        alert("Gagal mengirim memo. Pastikan Rules Firebase sudah diubah ke true.");
+        console.error(err);
       });
+    } else {
+      alert("Firebase belum terhubung!");
     }
-  </script>
+  }
+
+  // 4. Fungsi Hapus Memo
+  function deleteMemo(id) {
+    if (memoRef && id) {
+      memoRef.child(id).remove();
+    }
+  }
+
+  // Helper untuk mengamankan teks dari XSS
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text).replace(/[&<>"']/g, function(m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+    });
+  }
+</script>
 </body>
 </html>
