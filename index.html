@@ -16,6 +16,10 @@
   <!-- Style CSS Terpisah -->
   <link rel="stylesheet" href="style.css">
 
+  <!-- Firebase SDK untuk Sinkronisasi Memo antar Pembaca -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -321,10 +325,11 @@
           </div>
         </div>
 
-        <!-- SISI KANAN: CORETAN MEMO PINGGIR -->
+        <!-- SISI KANAN: CORETAN MEMO PINGGIR (TERBAGI ONLINE) -->
         <div class="sketch-box p-6 bg-amber-100/60 dark:bg-zinc-900/90 relative">
-          <div class="absolute -top-3 left-6 px-3 bg-amber-200 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold">
-            &pen; CORETAN MEMO PINGGIR
+          <div class="absolute -top-3 left-6 px-3 bg-amber-200 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            &pen; CORETAN MEMO LIVE
           </div>
 
           <div class="flex items-center justify-between mb-4 mt-2">
@@ -334,12 +339,13 @@
               </svg>
               Memo Margin Buku
             </h3>
-            <span class="font-hand text-lg text-zinc-600 dark:text-zinc-400 rotate-[-3deg]">*coretan pembaca</span>
+            <span class="font-hand text-lg text-zinc-600 dark:text-zinc-400 rotate-[-3deg]">*terbagikan publik</span>
           </div>
 
-          <!-- Input Memo Baru -->
-          <div class="mb-6 p-3 bg-amber-50 dark:bg-zinc-800/80 border border-dashed border-zinc-700 dark:border-zinc-400">
-            <label class="block font-mono text-xs font-bold uppercase mb-1">Tulis Coretan Singkat Anda:</label>
+          <!-- Input Memo Baru dengan Nama -->
+          <div class="mb-6 p-3 bg-amber-50 dark:bg-zinc-800/80 border border-dashed border-zinc-700 dark:border-zinc-400 space-y-2">
+            <label class="block font-mono text-xs font-bold uppercase">Tulis Coretan (Terlihat oleh pembaca lain):</label>
+            <input type="text" id="memoAuthorInput" placeholder="Nama / Alias Anda (opsional)..." class="w-full p-2 bg-transparent border border-zinc-500 dark:border-zinc-400 font-mono text-xs focus:outline-none">
             <div class="flex gap-2">
               <input type="text" id="newMemoInput" placeholder="Ketik catatan di pinggir halaman..." class="flex-1 p-2 bg-transparent border border-zinc-600 dark:border-zinc-300 font-hand text-xl focus:outline-none">
               <button onclick="addMarginMemo()" class="sketch-btn px-4 py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold">
@@ -350,7 +356,8 @@
 
           <!-- Container Memo -->
           <div id="memoContainer" class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-            <!-- Disisipkan otomatis via JavaScript -->
+            <!-- Disisipkan otomatis via JavaScript / Firebase -->
+            <div class="text-center font-mono text-xs text-zinc-500 py-4">Memuat catatan pembaca...</div>
           </div>
         </div>
 
@@ -396,28 +403,23 @@
       }
     })();
 
-    // Handle Kirim Surat langsung ke senpainpc@gmail.com
-function handleSendLetter(e) {
-  e.preventDefault();
-  
-  const name = document.getElementById('senderName').value;
-  const email = document.getElementById('senderEmail').value;
-  const subject = document.getElementById('letterSubject').value;
-  const body = document.getElementById('letterBody').value;
+    // 2. Handle Kirim Surat langsung ke senpainpc@gmail.com
+    function handleSendLetter(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('senderName').value;
+      const email = document.getElementById('senderEmail').value;
+      const subject = document.getElementById('letterSubject').value;
+      const body = document.getElementById('letterBody').value;
 
-  // Format isi email
-  const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
+      const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
+      const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
 
-  // URL Mailto mengarah ke senpainpc@gmail.com
-  const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
+      window.location.href = mailtoUrl;
 
-  // Buka aplikasi email pengguna
-  window.location.href = mailtoUrl;
-
-  // Tampilkan notifikasi
-  showToast(`Aplikasi email telah dibuka untuk mengirimkan surat ke senpainpc@gmail.com!`);
-  document.getElementById('letterForm').reset();
-}
+      showToast(`Aplikasi email telah dibuka untuk mengirimkan surat ke senpainpc@gmail.com!`);
+      document.getElementById('letterForm').reset();
+    }
 
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
@@ -430,37 +432,80 @@ function handleSendLetter(e) {
       document.getElementById('toastNotification').classList.add('hidden');
     }
 
-    // 3. Margin Memo Logic
-    const defaultMemos = [
-      { id: 1, text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
-      { id: 2, text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
-      { id: 3, text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
-    ];
+    // 3. SINKRONISASI MEMO LIVE (FIREBASE REALTIME DATABASE)
+    // Inisialisasi Database Publik Gratis untuk Memo Bersama
+    const firebaseConfig = {
+      databaseURL: "https://sen-molly-memos-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
 
-    function getStoredMemos() {
-      const saved = localStorage.getItem('margin_memos');
-      return saved ? JSON.parse(saved) : defaultMemos;
+    let memoRef = null;
+    let currentMemos = [];
+
+    try {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      const database = firebase.database();
+      memoRef = database.ref('public_memos');
+
+      // Mendengarkan perubahan memo secara Real-time dari pembaca lain
+      memoRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          currentMemos = Object.keys(data).map(key => ({
+            id: key,
+            ...data[key]
+          })).reverse();
+        } else {
+          currentMemos = getDefaultMemos();
+        }
+        renderMemos(currentMemos);
+      }, (error) => {
+        console.warn("Koneksi Firebase offline, menggunakan mode cadangan lokal:", error);
+        loadLocalMemos();
+      });
+    } catch (err) {
+      console.warn("Memuat mode offline:", err);
+      loadLocalMemos();
     }
 
-    function renderMemos() {
-      const memos = getStoredMemos();
+    function getDefaultMemos() {
+      return [
+        { id: "default_1", text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
+        { id: "default_2", text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
+        { id: "default_3", text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
+      ];
+    }
+
+    function loadLocalMemos() {
+      const saved = localStorage.getItem('margin_memos');
+      currentMemos = saved ? JSON.parse(saved) : getDefaultMemos();
+      renderMemos(currentMemos);
+    }
+
+    function renderMemos(memosList) {
       const container = document.getElementById('memoContainer');
       container.innerHTML = '';
 
-      memos.forEach((memo) => {
+      if (!memosList || memosList.length === 0) {
+        container.innerHTML = `<div class="text-center font-mono text-xs text-zinc-500 py-4">Belum ada coretan memo. Jadilah yang pertama mencoret!</div>`;
+        return;
+      }
+
+      memosList.forEach((memo) => {
         const memoDiv = document.createElement('div');
-        memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform";
+        memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform animate-fadeIn";
         
         memoDiv.innerHTML = `
           <div class="flex items-start justify-between gap-2">
             <div class="font-hand text-xl text-zinc-900 dark:text-zinc-100 leading-snug">
               "${escapeHtml(memo.text)}"
             </div>
-            <button onclick="deleteMemo(${memo.id})" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
+            <button onclick="deleteMemo('${memo.id}')" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
           </div>
           <div class="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-500 dark:text-zinc-400 border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-1">
             <span>&pen; ${escapeHtml(memo.author || 'Pembaca')}</span>
-            <span>${memo.time}</span>
+            <span>${escapeHtml(memo.time || '')}</span>
           </div>
         `;
         container.appendChild(memoDiv);
@@ -468,36 +513,64 @@ function handleSendLetter(e) {
     }
 
     function addMarginMemo() {
-      const input = document.getElementById('newMemoInput');
-      const text = input.value.trim();
+      const textInput = document.getElementById('newMemoInput');
+      const authorInput = document.getElementById('memoAuthorInput');
+      
+      const text = textInput.value.trim();
+      const author = authorInput.value.trim() || "Pembaca";
+
       if (!text) return;
 
-      const memos = getStoredMemos();
       const now = new Date();
       const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
 
-      const newMemo = {
-        id: Date.now(),
+      const newMemoData = {
         text: text,
+        author: author,
         time: timeStr,
-        author: "Pembaca Baru"
+        timestamp: Date.now()
       };
 
+      if (memoRef) {
+        // Kirim ke Firebase agar langsung terbagi ke semua pembaca lain
+        memoRef.push(newMemoData).catch(() => {
+          saveToLocalStorage(newMemoData);
+        });
+      } else {
+        saveToLocalStorage(newMemoData);
+      }
+
+      textInput.value = '';
+    }
+
+    function saveToLocalStorage(newMemo) {
+      const memos = currentMemos;
+      newMemo.id = 'local_' + Date.now();
       memos.unshift(newMemo);
       localStorage.setItem('margin_memos', JSON.stringify(memos));
-      input.value = '';
-      renderMemos();
+      renderMemos(memos);
     }
 
     function deleteMemo(id) {
-      let memos = getStoredMemos();
-      memos = memos.filter(m => m.id !== id);
-      localStorage.setItem('margin_memos', JSON.stringify(memos));
-      renderMemos();
+      if (memoRef && !id.startsWith('local_') && !id.startsWith('default_')) {
+        // Hapus dari Firebase Database
+        memoRef.child(id).remove().catch(() => {
+          removeFromLocal(id);
+        });
+      } else {
+        removeFromLocal(id);
+      }
+    }
+
+    function removeFromLocal(id) {
+      currentMemos = currentMemos.filter(m => m.id !== id);
+      localStorage.setItem('margin_memos', JSON.stringify(currentMemos));
+      renderMemos(currentMemos);
     }
 
     function escapeHtml(text) {
-      return text.replace(/[&<>"']/g, function(m) {
+      if (!text) return '';
+      return String(text).replace(/[&<>"']/g, function(m) {
         return {
           '&': '&amp;',
           '<': '&lt;',
@@ -507,8 +580,6 @@ function handleSendLetter(e) {
         }[m];
       });
     }
-
-    document.addEventListener('DOMContentLoaded', renderMemos);
   </script>
 </body>
 </html>
