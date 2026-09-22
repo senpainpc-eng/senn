@@ -296,7 +296,7 @@
 
             <div>
               <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Alamat Email / Kontak</label>
-              <input type="email" id="senderEmail" required placeholder="senpainpc@email.com" class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
+              <input type="email" id="senderEmail" required placeholder="users@email.com" class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
             </div>
 
             <div>
@@ -396,15 +396,28 @@
       }
     })();
 
-    // 2. Handle Surat Form
-    function handleSendLetter(e) {
-      e.preventDefault();
-      const name = document.getElementById('senderName').value;
-      const subject = document.getElementById('letterSubject').value;
+    // Handle Kirim Surat langsung ke senpainpc@gmail.com
+function handleSendLetter(e) {
+  e.preventDefault();
+  
+  const name = document.getElementById('senderName').value;
+  const email = document.getElementById('senderEmail').value;
+  const subject = document.getElementById('letterSubject').value;
+  const body = document.getElementById('letterBody').value;
 
-      showToast(`Surat perihal "${subject}" dari ${name} telah berhasil dikirim!`);
-      document.getElementById('letterForm').reset();
-    }
+  // Format isi email
+  const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
+
+  // URL Mailto mengarah ke senpainpc@gmail.com
+  const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
+
+  // Buka aplikasi email pengguna
+  window.location.href = mailtoUrl;
+
+  // Tampilkan notifikasi
+  showToast(`Aplikasi email telah dibuka untuk mengirimkan surat ke senpainpc@gmail.com!`);
+  document.getElementById('letterForm').reset();
+}
 
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
