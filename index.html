@@ -373,9 +373,9 @@
     </div>
   </footer>
 
-  <!-- JAVASCRIPT -->
+  <!-- JAVASCRIPT TERPERBARUI -->
   <script>
-    // 1. Theme Toggle (Saved in LocalStorage)
+    // 1. Theme Toggle
     function applyTheme(isDark) {
       if (isDark) {
         document.documentElement.classList.add('dark');
@@ -403,7 +403,7 @@
       }
     })();
 
-    // 2. Handle Kirim Surat langsung ke senpainpc@gmail.com
+    // 2. Handle Kirim Surat
     function handleSendLetter(e) {
       e.preventDefault();
       
@@ -416,7 +416,6 @@
       const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
 
       window.location.href = mailtoUrl;
-
       showToast(`Aplikasi email telah dibuka untuk mengirimkan surat ke senpainpc@gmail.com!`);
       document.getElementById('letterForm').reset();
     }
@@ -432,14 +431,16 @@
       document.getElementById('toastNotification').classList.add('hidden');
     }
 
-    // 3. SINKRONISASI MEMO LIVE (FIREBASE REALTIME DATABASE)
-    // Inisialisasi Database Publik Gratis untuk Memo Bersama
+    // 3. SINKRONISASI MEMO LIVE (FIREBASE + LOCALSTORAGE FALLBACK)
     const firebaseConfig = {
       databaseURL: "https://sen-molly-memos-default-rtdb.asia-southeast1.firebasedatabase.app"
     };
 
     let memoRef = null;
     let currentMemos = [];
+
+    // Muat data lokal terlebih dahulu agar tampilan cepat
+    loadLocalMemos();
 
     try {
       if (!firebase.apps.length) {
@@ -448,32 +449,31 @@
       const database = firebase.database();
       memoRef = database.ref('public_memos');
 
-      // Mendengarkan perubahan memo secara Real-time dari pembaca lain
+      // Mendengarkan perubahan memo secara Real-time dari Firebase
       memoRef.on('value', (snapshot) => {
         const data = snapshot.val();
         if (data) {
-          currentMemos = Object.keys(data).map(key => ({
+          const firebaseMemos = Object.keys(data).map(key => ({
             id: key,
             ...data[key]
           })).reverse();
-        } else {
-          currentMemos = getDefaultMemos();
+          
+          currentMemos = firebaseMemos;
+          saveLocalBackup(currentMemos);
+          renderMemos(currentMemos);
         }
-        renderMemos(currentMemos);
       }, (error) => {
-        console.warn("Koneksi Firebase offline, menggunakan mode cadangan lokal:", error);
-        loadLocalMemos();
+        console.warn("Firebase dikunci/offline. Menggunakan mode lokal:", error);
       });
     } catch (err) {
-      console.warn("Memuat mode offline:", err);
-      loadLocalMemos();
+      console.warn("Gagal terhubung ke Firebase:", err);
     }
 
     function getDefaultMemos() {
       return [
-        { id: "default_1", text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
-        { id: "default_2", text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
-        { id: "default_3", text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
+        { id: "def_1", text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
+        { id: "def_2", text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
+        { id: "def_3", text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
       ];
     }
 
@@ -483,8 +483,13 @@
       renderMemos(currentMemos);
     }
 
+    function saveLocalBackup(memos) {
+      localStorage.setItem('margin_memos', JSON.stringify(memos));
+    }
+
     function renderMemos(memosList) {
       const container = document.getElementById('memoContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       if (!memosList || memosList.length === 0) {
@@ -512,6 +517,7 @@
       });
     }
 
+    // Fungsi Tambah Memo (Langsung Tampil di Layar)
     function addMarginMemo() {
       const textInput = document.getElementById('newMemoInput');
       const authorInput = document.getElementById('memoAuthorInput');
@@ -524,48 +530,44 @@
       const now = new Date();
       const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
 
-      const newMemoData = {
+      const newMemo = {
+        id: 'memo_' + Date.now(),
         text: text,
         author: author,
         time: timeStr,
         timestamp: Date.now()
       };
 
+      // 1. Langsung tampilkan di layar pengguna seketika
+      currentMemos.unshift(newMemo);
+      renderMemos(currentMemos);
+      saveLocalBackup(currentMemos);
+
+      // 2. Kirim ke Firebase di latar belakang
       if (memoRef) {
-        // Kirim ke Firebase agar langsung terbagi ke semua pembaca lain
-        memoRef.push(newMemoData).catch(() => {
-          saveToLocalStorage(newMemoData);
+        memoRef.push({
+          text: text,
+          author: author,
+          time: timeStr,
+          timestamp: Date.now()
+        }).catch((err) => {
+          console.warn("Gagal menyimpan ke Firebase (Akses ditolak):", err);
         });
-      } else {
-        saveToLocalStorage(newMemoData);
       }
 
       textInput.value = '';
     }
 
-    function saveToLocalStorage(newMemo) {
-      const memos = currentMemos;
-      newMemo.id = 'local_' + Date.now();
-      memos.unshift(newMemo);
-      localStorage.setItem('margin_memos', JSON.stringify(memos));
-      renderMemos(memos);
-    }
-
     function deleteMemo(id) {
-      if (memoRef && !id.startsWith('local_') && !id.startsWith('default_')) {
-        // Hapus dari Firebase Database
-        memoRef.child(id).remove().catch(() => {
-          removeFromLocal(id);
-        });
-      } else {
-        removeFromLocal(id);
-      }
-    }
-
-    function removeFromLocal(id) {
+      // Hapus dari daftar lokal
       currentMemos = currentMemos.filter(m => m.id !== id);
-      localStorage.setItem('margin_memos', JSON.stringify(currentMemos));
+      saveLocalBackup(currentMemos);
       renderMemos(currentMemos);
+
+      // Hapus dari Firebase jika terhubung
+      if (memoRef && !id.startsWith('def_') && !id.startsWith('memo_')) {
+        memoRef.child(id).remove().catch(() => {});
+      }
     }
 
     function escapeHtml(text) {
