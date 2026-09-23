@@ -73,53 +73,18 @@
 }
 
 /* =========================================================
-   TAMBAHAN OPSIONAL (PELENGKAP TANPA MENGUBAH STYLE SEBELUMNYA)
+   TAMBAHAN: POSISI PIRINGAN HITAM (VINYL) AGAR LEBIH KE KIRI
    ========================================================= */
 
-/* Input / Form Field Gaya Sketsa */
-.sketch-input {
-  border: 2px solid #27272a;
-  background-color: #ffffff;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.piringan-hitam, .vinyl-record {
+  /* Opsi 1: Menggeser posisi relatif/absolut ke kiri */
+  transform: translateX(-35px); /* Sesuaikan angka ini (misal: -20px s/d -50px) */
+  transition: transform 0.3s ease;
+  z-index: 1; /* Memastikan piringan berada di belakang bingkai foto */
 }
 
-.sketch-input:focus {
-  box-shadow: 3px 3px 0px 0px #27272a;
-}
-
-.dark .sketch-input {
-  border: 2px solid #e4e4e7;
-  background-color: #18181b;
-  color: #f4f4f5;
-}
-
-.dark .sketch-input:focus {
-  box-shadow: 3px 3px 0px 0px #e4e4e7;
-}
-
-/* Badge / Label Kategori Gaya Buku */
-.sketch-badge {
-  border: 1.5px solid #27272a;
-  background-color: #e5e0d8;
-  color: #27272a;
-  font-weight: 600;
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: 2px;
-}
-
-.dark .sketch-badge {
-  border: 1.5px solid #e4e4e7;
-  background-color: #27272a;
-  color: #e4e4e7;
-}
-
-/* Efek Tulang Buku / Book Spine Effect untuk Sampul */
-.book-cover-shadow {
-  box-shadow: 6px 6px 0px 0px #27272a;
-}
-
-.dark .book-cover-shadow {
-  box-shadow: 6px 6px 0px 0px #e4e4e7;
+/* Jika bingkai foto Senn menggunakan z-index lebih tinggi */
+.foto-senn-container {
+  position: relative;
+  z-index: 2;
 }
