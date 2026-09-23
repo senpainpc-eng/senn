@@ -73,18 +73,25 @@
 }
 
 /* =========================================================
-   TAMBAHAN: POSISI PIRINGAN HITAM (VINYL) AGAR LEBIH KE KIRI
+   TAMBAHAN: PIRINGAN HITAM TAMPIL 1/4 (25%) DI BELAKANG FOTO
    ========================================================= */
 
-.piringan-hitam, .vinyl-record {
-  /* Opsi 1: Menggeser posisi relatif/absolut ke kiri */
-  transform: translateX(-50px); /* Sesuaikan angka ini (misal: -20px s/d -50px) */
-  transition: transform 0.3s ease;
-  z-index: 1; /* Memastikan piringan berada di belakang bingkai foto */
-}
-
-/* Jika bingkai foto Senn menggunakan z-index lebih tinggi */
+/* 1. Pembungkus Foto Senn agar posisi layernya di depan piringan */
 .foto-senn-container {
   position: relative;
-  z-index: 2;
+  z-index: 2; /* Menempatkan foto di atas piringan */
+}
+
+/* 2. Piringan Hitam (Vinyl) */
+.piringan-hitam, .vinyl-record {
+  position: relative;
+  z-index: 1; /* Menempatkan piringan di belakang foto */
+  
+  /* Menggeser 70% - 75% lebar piringan ke kiri di belakang foto */
+  transform: translateX(-75%);
+  
+  /* Supaya tidak merusak tata letak elemen di sebelahnya */
+  margin-right: -75%; 
+  
+  transition: transform 0.3s ease;
 }
