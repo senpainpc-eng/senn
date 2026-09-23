@@ -78,7 +78,7 @@
 
 .piringan-hitam, .vinyl-record {
   /* Opsi 1: Menggeser posisi relatif/absolut ke kiri */
-  transform: translateX(-35px); /* Sesuaikan angka ini (misal: -20px s/d -50px) */
+  transform: translateX(-50px); /* Sesuaikan angka ini (misal: -20px s/d -50px) */
   transition: transform 0.3s ease;
   z-index: 1; /* Memastikan piringan berada di belakang bingkai foto */
 }
