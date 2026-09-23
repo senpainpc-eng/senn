@@ -84,13 +84,13 @@
           <!-- Foto Ilustrasi Penulis & Piringan Hitam -->
           <div class="md:col-span-4 flex justify-center">
             
-            <!-- Wrapper Khusus Ukuran Foto (w-52) agar Piringan Terikat pada Bingkai Foto -->
+            <!-- Wrapper Khusus Ukuran Foto (w-52) -->
             <div class="relative w-52">
 
-              <!-- File Audio -->
-              <audio id="bgMusic" src="GHEA INDRAWARI - BUCKETLIST (Feat. BOY WILLIAM) [OFFICIAL MUSIC VIDEO].mp3" loop></audio>
+              <!-- File Audio Ditambahkan Tag autoplay -->
+              <audio id="bgMusic" src="GHEA INDRAWARI - BUCKETLIST (Feat. BOY WILLIAM) [OFFICIAL MUSIC VIDEO].mp3" loop autoplay></audio>
 
-              <!-- Piringan Hitam (-right-9 = 36px keluar dari 144px width -> persis 1/4 bagian tampil) -->
+              <!-- Piringan Hitam -->
               <div id="vinylRecord" onclick="toggleMusic()" class="absolute -right-9 top-12 w-36 h-36 rounded-full border-4 border-zinc-800 dark:border-zinc-200 bg-zinc-900 flex items-center justify-center cursor-pointer shadow-xl animate-spin z-0 [animation-play-state:paused] hover:scale-105 transition-transform" title="Klik untuk Play/Pause Musik">
                 <!-- Label Tengah Piringan -->
                 <div class="w-12 h-12 rounded-full bg-amber-400 border-2 border-zinc-800 dark:border-zinc-200 flex items-center justify-center">
@@ -102,7 +102,7 @@
                 <div class="absolute inset-8 rounded-full border border-zinc-700/50"></div>
               </div>
 
-              <!-- Foto Utama (z-10 & Background Solid agar menutupi 3/4 piringan) -->
+              <!-- Foto Utama -->
               <div class="relative group z-10">
                 <div class="w-52 h-64 border-2 border-zinc-900 dark:border-zinc-100 p-2 bg-amber-100 dark:bg-zinc-800 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-md">
                   <img src="WhatsApp Image 2026-09-22 at 23.59.04.jpeg" alt="Ilustrasi Penulis dan Kucing" class="w-full h-48 object-cover border border-zinc-800 dark:border-zinc-200 filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300">
@@ -387,7 +387,7 @@
     </div>
   </footer>
 
-  <!-- Toast Notification Global (Melayang di pojok kanan bawah) -->
+  <!-- Toast Notification Global -->
   <div id="toastNotification" class="hidden fixed bottom-6 right-6 z-[100] p-4 shadow-xl border-2 border-zinc-800 dark:border-zinc-200 bg-amber-200 dark:bg-zinc-800 font-mono text-sm flex items-center justify-between gap-4 max-w-xs rounded-none transition-opacity duration-300">
     <span id="toastMessage">Pesan Notifikasi</span>
     <button onclick="hideToast()" class="font-bold text-lg hover:text-red-500 transition-colors px-1">&times;</button>
@@ -423,27 +423,61 @@
       }
     })();
 
-    // 2. Kontrol Musik Piringan Hitam dengan Notifikasi
-    function toggleMusic() {
+    // 2. Kontrol Musik & Auto Play Handler
+    function playAudioAndSpin() {
       const music = document.getElementById('bgMusic');
       const vinyl = document.getElementById('vinylRecord');
       
-      const judulLagu = "▶️ PLAY MUSIK"; 
+      const playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          vinyl.classList.remove('[animation-play-state:paused]');
+          vinyl.classList.add('[animation-play-state:running]');
+          showToast(`🎵 Memutar Musik`);
+        }).catch(error => {
+          // Jika diblokir kebijakan autoplay browser, tunggu interaksi pertama
+          console.log("Autoplay diblokir browser. Menunggu klik/interaksi pertama pengguna.");
+        });
+      }
+    }
+
+    function toggleMusic() {
+      const music = document.getElementById('bgMusic');
+      const vinyl = document.getElementById('vinylRecord');
 
       if (music.paused) {
-        music.play();
-        vinyl.classList.remove('[animation-play-state:paused]');
-        vinyl.classList.add('[animation-play-state:running]');
-        showToast(`🎵 Memutar: ${judulLagu}`);
+        playAudioAndSpin();
       } else {
         music.pause();
         vinyl.classList.remove('[animation-play-state:running]');
         vinyl.classList.add('[animation-play-state:paused]');
-        showToast(`⏸️ STOP MUSIK`);
+        showToast(`⏸️ Musik Dihentikan`);
       }
     }
 
-    // Fungsi Notifikasi Toast (Global & Auto-hide)
+    // Fungsi Auto Play saat Web Dibuka
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Coba Autoplay langsung
+      playAudioAndSpin();
+
+      // 2. Cadangan: Putar pada interaksi/klik pertama jika browser memblokir autoplay awal
+      const triggerAudioOnFirstTouch = () => {
+        const music = document.getElementById('bgMusic');
+        if (music.paused) {
+          playAudioAndSpin();
+        }
+        // Hapus event listener agar tidak terus-terusan berjalan
+        document.removeEventListener('click', triggerAudioOnFirstTouch);
+        document.removeEventListener('touchstart', triggerAudioOnFirstTouch);
+        document.removeEventListener('keydown', triggerAudioOnFirstTouch);
+      };
+
+      document.addEventListener('click', triggerAudioOnFirstTouch);
+      document.addEventListener('touchstart', triggerAudioOnFirstTouch);
+      document.addEventListener('keydown', triggerAudioOnFirstTouch);
+    });
+
+    // 3. Notifikasi Toast Global
     let toastTimeout;
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
@@ -454,7 +488,6 @@
       toast.classList.remove('opacity-0');
       
       clearTimeout(toastTimeout);
-      
       toastTimeout = setTimeout(() => {
         hideToast();
       }, 3000);
@@ -463,13 +496,12 @@
     function hideToast() {
       const toast = document.getElementById('toastNotification');
       toast.classList.add('opacity-0');
-      
       setTimeout(() => {
         toast.classList.add('hidden');
       }, 300);
     }
 
-    // 3. Handle Kirim Surat langsung ke senpainpc@gmail.com
+    // 4. Handle Kirim Surat
     function handleSendLetter(e) {
       e.preventDefault();
 
@@ -488,7 +520,7 @@
       document.getElementById('letterForm').reset();
     }
 
-    // 4. Margin Memo Logic
+    // 5. Margin Memo Logic
     const defaultMemos = [
       { id: 1, text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
       { id: 2, text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
@@ -569,7 +601,6 @@
       });
     }
 
-    // Inisialisasi render memo saat halaman dimuat
     document.addEventListener('DOMContentLoaded', () => {
       renderMemos();
     });
