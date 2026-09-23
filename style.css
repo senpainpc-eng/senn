@@ -2,13 +2,6 @@
    STYLE KATALOG HAYAT - TEMA BUKU GRAMEDIA & SKETSA MONOKROM
    ========================================================= */
 
-/* Import Google Font Caveat (Efek Tulisan Tangan) */
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
-
-.font-hand {
-  font-family: 'Caveat', cursive;
-}
-
 /* Pattern Latar Belakang Kertas Vintage */
 .bg-paper-pattern {
   background-color: #f6f3eb;
@@ -26,7 +19,7 @@
 .sketch-box {
   border: 2px solid #27272a;
   box-shadow: 4px 4px 0px 0px #27272a;
-  transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .dark .sketch-box {
@@ -36,14 +29,7 @@
 
 /* Tombol Gaya Sketsa & Efek Tekan */
 .sketch-btn {
-  border: 2px solid #27272a;
-  box-shadow: 3px 3px 0px 0px #27272a;
-  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease-in-out;
-}
-
-.dark .sketch-btn {
-  border: 2px solid #e4e4e7;
-  box-shadow: 3px 3px 0px 0px #e4e4e7;
+  transition: all 0.15s ease-in-out;
 }
 
 .sketch-btn:hover {
