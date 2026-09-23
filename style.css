@@ -1,6 +1,5 @@
 /* =========================================================
    STYLE KATALOG HAYAT - TEMA BUKU GRAMEDIA & SKETSA MONOKROM
-   (KODE ASLI ANDA - TIDAK DIUBAH)
    ========================================================= */
 
 /* Pattern Latar Belakang Kertas Vintage */
@@ -73,99 +72,33 @@
   background: #e4e4e7;
 }
 
-
 /* =========================================================
-   TAMBAHAN: ELEMEN PIRINGAN & PENDUKUNG (MENYESUAIKAN TEMA)
+   TAMBAHAN OPSIONAL (PELENGKAP TANPA MENGUBAH STYLE SEBELUMNYA)
    ========================================================= */
 
-/* Kontainer Piringan Utama */
-.piringan-box {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 2px solid #27272a;
-  background-color: #1a1a1a;
-  box-shadow: 4px 4px 0px 0px #27272a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.dark .piringan-box {
-  border-color: #e4e4e7;
-  background-color: #27272a;
-  box-shadow: 4px 4px 0px 0px #e4e4e7;
-}
-
-/* Garis Alur Piringan (Detail Sketsa) */
-.piringan-groove {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px dashed rgba(255, 255, 255, 0.15);
-}
-.piringan-groove-1 { width: 85%; height: 85%; }
-.piringan-groove-2 { width: 65%; height: 65%; }
-.dark .piringan-groove { border-color: rgba(0, 0, 0, 0.2); }
-
-/* Label Tengah Piringan (Kertas Vintage) */
-.piringan-label {
-  position: relative;
-  z-index: 10;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: #e5e0d8;
-  border: 2px solid #27272a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.dark .piringan-label {
-  background-color: #d4cebf;
-  border-color: #121214;
-}
-
-/* Lubang Tengah Piringan */
-.piringan-hole {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: #f6f3eb;
-  border: 1px solid #27272a;
-}
-.dark .piringan-hole {
-  background-color: #121214;
-  border-color: #e4e4e7;
-}
-
-/* Animasi Putar Piringan */
-.piringan-spin {
-  animation: putar-piringan 4s linear infinite;
-}
-@keyframes putar-piringan {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Input Field Sketsa */
+/* Input / Form Field Gaya Sketsa */
 .sketch-input {
   border: 2px solid #27272a;
   background-color: #ffffff;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.sketch-input:focus { box-shadow: 3px 3px 0px 0px #27272a; }
+
+.sketch-input:focus {
+  box-shadow: 3px 3px 0px 0px #27272a;
+}
+
 .dark .sketch-input {
   border: 2px solid #e4e4e7;
   background-color: #18181b;
   color: #f4f4f5;
 }
-.dark .sketch-input:focus { box-shadow: 3px 3px 0px 0px #e4e4e7; }
 
-/* Badge / Kategori Sketsa */
+.dark .sketch-input:focus {
+  box-shadow: 3px 3px 0px 0px #e4e4e7;
+}
+
+/* Badge / Label Kategori Gaya Buku */
 .sketch-badge {
   border: 1.5px solid #27272a;
   background-color: #e5e0d8;
@@ -175,8 +108,18 @@
   padding: 2px 8px;
   border-radius: 2px;
 }
+
 .dark .sketch-badge {
   border: 1.5px solid #e4e4e7;
   background-color: #27272a;
   color: #e4e4e7;
+}
+
+/* Efek Tulang Buku / Book Spine Effect untuk Sampul */
+.book-cover-shadow {
+  box-shadow: 6px 6px 0px 0px #27272a;
+}
+
+.dark .book-cover-shadow {
+  box-shadow: 6px 6px 0px 0px #e4e4e7;
 }
