@@ -82,35 +82,41 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center mt-2">
           
           <!-- Foto Ilustrasi Penulis & Piringan Hitam -->
-          <div class="md:col-span-4 flex justify-center relative">
+          <div class="md:col-span-4 flex justify-center">
             
-            <!-- File Audio (Ganti src dengan nama file mp3 Anda) -->
-            <audio id="bgMusic" src="GHEA INDRAWARI - BUCKETLIST (Feat. BOY WILLIAM) [OFFICIAL MUSIC VIDEO].mp3" loop></audio>
+            <!-- Wrapper Khusus Ukuran Foto (w-52) agar Piringan Terikat pada Bingkai Foto -->
+            <div class="relative w-52">
 
-            <!-- Piringan Hitam -->
-            <div id="vinylRecord" onclick="toggleMusic()" class="absolute -right-8 top-12 w-36 h-36 rounded-full border-4 border-zinc-800 dark:border-zinc-200 bg-zinc-900 flex items-center justify-center cursor-pointer shadow-xl animate-spin z-0 [animation-play-state:paused] hover:scale-105 transition-transform" title="Klik untuk Play/Pause Musik">
-              <!-- Label Tengah Piringan -->
-              <div class="w-12 h-12 rounded-full bg-amber-400 border-2 border-zinc-800 dark:border-zinc-200 flex items-center justify-center">
-                <div class="w-3 h-3 bg-zinc-900 rounded-full"></div>
+              <!-- File Audio -->
+              <audio id="bgMusic" src="GHEA INDRAWARI - BUCKETLIST (Feat. BOY WILLIAM) [OFFICIAL MUSIC VIDEO].mp3" loop></audio>
+
+              <!-- Piringan Hitam (-right-9 = 36px keluar dari 144px width -> persis 1/4 bagian tampil) -->
+              <div id="vinylRecord" onclick="toggleMusic()" class="absolute -right-9 top-12 w-36 h-36 rounded-full border-4 border-zinc-800 dark:border-zinc-200 bg-zinc-900 flex items-center justify-center cursor-pointer shadow-xl animate-spin z-0 [animation-play-state:paused] hover:scale-105 transition-transform" title="Klik untuk Play/Pause Musik">
+                <!-- Label Tengah Piringan -->
+                <div class="w-12 h-12 rounded-full bg-amber-400 border-2 border-zinc-800 dark:border-zinc-200 flex items-center justify-center">
+                  <div class="w-3 h-3 bg-zinc-900 rounded-full"></div>
+                </div>
+                <!-- Guratan Piringan (Efek Visual) -->
+                <div class="absolute inset-2 rounded-full border border-zinc-700/50"></div>
+                <div class="absolute inset-5 rounded-full border border-zinc-700/50"></div>
+                <div class="absolute inset-8 rounded-full border border-zinc-700/50"></div>
               </div>
-              <!-- Guratan Piringan (Efek Visual) -->
-              <div class="absolute inset-2 rounded-full border border-zinc-700/50"></div>
-              <div class="absolute inset-5 rounded-full border border-zinc-700/50"></div>
-              <div class="absolute inset-8 rounded-full border border-zinc-700/50"></div>
-            </div>
 
-            <!-- Foto Utama (z-10 agar menutupi sebagian piringan) -->
-            <div class="relative group z-10">
-              <div class="w-52 h-64 border-2 border-zinc-900 dark:border-zinc-100 p-2 bg-amber-100/60 dark:bg-zinc-800/60 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-md">
-                <img src="WhatsApp Image 2026-09-22 at 23.59.04.jpeg" alt="Ilustrasi Penulis dan Kucing" class="w-full h-48 object-cover border border-zinc-800 dark:border-zinc-200 filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300">
-                <div class="font-hand text-lg mt-2 text-zinc-800 dark:text-zinc-200 rotate-[-1deg] font-bold">
-                  Senn
+              <!-- Foto Utama (z-10 & Background Solid agar menutupi 3/4 piringan) -->
+              <div class="relative group z-10">
+                <div class="w-52 h-64 border-2 border-zinc-900 dark:border-zinc-100 p-2 bg-amber-100 dark:bg-zinc-800 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-md">
+                  <img src="WhatsApp Image 2026-09-22 at 23.59.04.jpeg" alt="Ilustrasi Penulis dan Kucing" class="w-full h-48 object-cover border border-zinc-800 dark:border-zinc-200 filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300">
+                  <div class="font-hand text-lg mt-2 text-zinc-800 dark:text-zinc-200 rotate-[-1deg] font-bold">
+                    Senn
+                  </div>
+                </div>
+                <div class="absolute -bottom-3 -right-3 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs px-2.5 py-1 font-bold border border-zinc-900 dark:border-zinc-100">
+                  ADMIN
                 </div>
               </div>
-              <div class="absolute -bottom-3 -right-3 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs px-2.5 py-1 font-bold border border-zinc-900 dark:border-zinc-100">
-                ADMIN
-              </div>
+
             </div>
+
           </div>
 
           <!-- Judul & Info -->
@@ -422,20 +428,17 @@
       const music = document.getElementById('bgMusic');
       const vinyl = document.getElementById('vinylRecord');
       
-      // GANTI dengan judul lagu asli milik Anda
       const judulLagu = "▶️ PLAY MUSIK"; 
 
       if (music.paused) {
         music.play();
         vinyl.classList.remove('[animation-play-state:paused]');
         vinyl.classList.add('[animation-play-state:running]');
-        // Tampilkan toast saat musik memutar
         showToast(`🎵 Memutar: ${judulLagu}`);
       } else {
         music.pause();
         vinyl.classList.remove('[animation-play-state:running]');
         vinyl.classList.add('[animation-play-state:paused]');
-        // Tampilkan toast saat musik dijeda
         showToast(`⏸️ STOP MUSIK`);
       }
     }
@@ -452,7 +455,6 @@
       
       clearTimeout(toastTimeout);
       
-      // Sembunyikan otomatis setelah 3 detik
       toastTimeout = setTimeout(() => {
         hideToast();
       }, 3000);
@@ -460,9 +462,8 @@
 
     function hideToast() {
       const toast = document.getElementById('toastNotification');
-      toast.classList.add('opacity-0'); // Animasi fade out
+      toast.classList.add('opacity-0');
       
-      // Tunggu animasi selesai baru di hidden
       setTimeout(() => {
         toast.classList.add('hidden');
       }, 300);
@@ -477,16 +478,12 @@
       const subject = document.getElementById('letterSubject').value;
       const body = document.getElementById('letterBody').value;
 
-      // Format isi email
       const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
 
-      // URL Mailto
       const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
 
-      // Buka aplikasi email pengguna
       window.location.href = mailtoUrl;
 
-      // Tampilkan notifikasi
       showToast(`Membuka aplikasi email...`);
       document.getElementById('letterForm').reset();
     }
@@ -506,6 +503,7 @@
     function renderMemos() {
       const memos = getStoredMemos();
       const container = document.getElementById('memoContainer');
+      if (!container) return;
       container.innerHTML = '';
 
       memos.forEach((memo) => {
@@ -571,7 +569,10 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', renderMemos);
+    // Inisialisasi render memo saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMemos();
+    });
   </script>
 </body>
 </html>
