@@ -107,7 +107,7 @@
               Disusun oleh: <strong class="text-zinc-900 dark:text-zinc-100 font-serif text-base">Senn</strong>
             </p>
             <div class="border-l-4 border-zinc-800 dark:border-zinc-200 pl-4 py-1 italic font-serif text-lg text-zinc-700 dark:text-zinc-300">
-              "Pantang Menyerah Sebelum Menjadi Anime"
+              "Banyak orang yang gagal karena mereka tidak tidak memahami usaha yang diperlukan untuk menjadi Sukses"
             </div>
             <div class="pt-2 flex flex-wrap gap-3">
               <a href="#bab1" class="sketch-btn px-4 py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold flex items-center gap-2">
@@ -285,17 +285,17 @@
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
             </svg>
-            Kirim Surat Kepada Penulis
+            Kirim Surat 
           </h3>
 
           <form id="letterForm" onsubmit="handleSendLetter(event)" class="space-y-4 font-mono text-sm">
             <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Nama Pengirim / Pembaca</label>
+              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Nama Pengirim </label>
               <input type="text" id="senderName" required placeholder="Tuliskan namamu..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
             </div>
 
             <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Alamat Email / Kontak</label>
+              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Email Anda</label>
               <input type="email" id="senderEmail" required placeholder="users@email.com..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
             </div>
 
@@ -305,18 +305,18 @@
             </div>
 
             <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Isi Surat / Pesan</label>
+              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Isi Pesan</label>
               <textarea id="letterBody" rows="4" required placeholder="Tuliskan pesan lengkapmu untuk penulis di sini..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 resize-none"></textarea>
             </div>
 
             <button type="submit" class="sketch-btn w-full py-3 px-6 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono font-bold border-2 border-zinc-900 dark:border-zinc-100 flex items-center justify-center gap-2">
-              <span>Layangkan Surat</span> &rarr;
+              <span>Kirim Surat</span> &rarr;
             </button>
           </form>
 
           <!-- Toast Notification -->
           <div id="toastNotification" class="hidden mt-4 p-3 border-2 border-zinc-800 dark:border-zinc-200 bg-amber-200 dark:bg-zinc-800 font-mono text-xs flex items-center justify-between">
-            <span id="toastMessage">Surat telah dilayangkan ke meja penulis!</span>
+            <span id="toastMessage">Surat telah di kirim ke Admin!</span>
             <button onclick="hideToast()" class="font-bold px-2">&times;</button>
           </div>
         </div>
