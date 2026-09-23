@@ -3,513 +3,151 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SenMolly</title>
-
-  <!-- icon web bio -->
-  <link rel="icon" type="image/jpeg" href="WhatsApp Image 2026-09-22 at 23.59.04.jpeg">
-
+  <title>Katalog Hayat — Tema Buku & Sketsa Monokrom</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,600;0,800;1,400;1,700&display=swap" rel="stylesheet">
-
-  <!-- Style CSS Terpisah -->
-  <link rel="stylesheet" href="style.css">
-
   <script>
     tailwind.config = {
       darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            serif: ['"Playfair Display"', 'serif'],
-            mono: ['"Courier Prime"', 'monospace'],
-            hand: ['"Caveat"', 'cursive'],
-          }
-        }
-      }
     }
   </script>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- File CSS Kustom -->
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-paper-pattern text-zinc-900 dark:text-zinc-100 font-serif transition-colors duration-300 min-h-screen">
+<body class="bg-paper-pattern text-zinc-800 dark:text-zinc-100 min-h-screen transition-colors duration-200">
 
-  <!-- STICKY HEADER NAVIGATION -->
-  <header class="sticky top-0 z-50 bg-amber-50/90 dark:bg-zinc-950/90 backdrop-blur-md border-b-2 border-zinc-800 dark:border-zinc-200 py-3 px-4 shadow-sm">
-    <div class="max-w-5xl mx-auto flex items-center justify-between gap-3">
-
-      <!-- Logo / Book Tag -->
-      <a href="#bab0" class="flex items-center gap-2 group">
-        <div class="w-8 h-8 border-2 border-zinc-900 dark:border-zinc-100 flex items-center justify-center font-bold font-mono text-sm group-hover:bg-zinc-900 group-hover:text-amber-50 dark:group-hover:bg-zinc-100 dark:group-hover:text-zinc-900 transition-colors">
-          SN
-        </div>
-        <span class="font-serif font-bold tracking-tight text-lg hidden sm:inline">SENN ?</span>
-      </a>
-
-      <!-- Navigation & Dark Mode Switcher -->
-      <div class="flex items-center gap-2">
-        <nav class="flex items-center gap-1 font-mono text-xs font-bold overflow-x-auto py-1">
-          <a href="#bab0" class="px-2.5 py-1.5 border border-zinc-800 dark:border-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-zinc-100 dark:hover:text-zinc-900 transition-all">Bab 0</a>
-          <a href="#bab1" class="px-2.5 py-1.5 border border-zinc-800 dark:border-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-zinc-100 dark:hover:text-zinc-900 transition-all">Bab I</a>
-          <a href="#bab2" class="px-2.5 py-1.5 border border-zinc-800 dark:border-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-zinc-100 dark:hover:text-zinc-900 transition-all">Bab II</a>
-          <a href="#bab3" class="px-2.5 py-1.5 border border-zinc-800 dark:border-zinc-300 hover:bg-zinc-900 hover:text-white dark:hover:bg-zinc-100 dark:hover:text-zinc-900 transition-all">Bab III</a>
-        </nav>
-
-        <!-- Dark / Light Mode Switcher (Di kanan Bab III) -->
-        <button id="themeToggleBtn" onclick="toggleTheme()" class="p-1.5 border-2 border-zinc-900 dark:border-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors" title="Beralih Mode Terang/Gelap">
-          <!-- Sun Icon (mode gelap) -->
-          <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-          <!-- Moon Icon (mode terang) -->
-          <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-        </button>
+  <!-- Header / Navigasi -->
+  <header class="sticky top-0 z-50 bg-paper-pattern border-b-2 border-zinc-800 dark:border-zinc-200 py-4 px-6">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold font-hand tracking-wide">Katalog Hayat</h1>
+        <p class="text-xs text-zinc-600 dark:text-zinc-400">Catatan & Koleksi Bacaan Monokrom</p>
       </div>
 
+      <div class="flex items-center gap-3">
+        <!-- Tombol Dark Mode Toggle -->
+        <button id="theme-toggle" aria-label="Ubah Tema" class="sketch-btn bg-amber-100 dark:bg-zinc-800 p-2 text-xl rounded flex items-center justify-center">
+          <i id="theme-icon" class="ph ph-moon"></i>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto px-4 py-8 space-y-16">
+  <!-- Konten Utama -->
+  <main class="max-w-6xl mx-auto px-6 py-8">
+    
+    <!-- Section Pencarian & Filter -->
+    <section class="mb-10 flex flex-col md:flex-row gap-4 justify-between items-center">
+      <!-- Search Bar -->
+      <div class="w-full md:w-1/2 relative">
+        <input type="text" placeholder="Cari judul buku atau penulis..." 
+               class="sketch-box w-full px-4 py-2 bg-white dark:bg-zinc-900 focus:outline-none text-sm">
+      </div>
 
-    <!-- BAB 0: SAMPUL & PRAKATA -->
-    <section id="bab0" class="pt-8 pb-12 border-b-2 border-dashed border-zinc-400 dark:border-zinc-700">
-      <div class="sketch-box p-6 md:p-10 bg-amber-50/80 dark:bg-zinc-900/80 relative">
-        <div class="absolute top-3 right-4 font-mono text-xs text-zinc-500 uppercase tracking-widest">
-          [ No. Reg: 2026/ED-01 ]
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center mt-2">
-          <!-- Foto Ilustrasi Penulis -->
-          <div class="md:col-span-4 flex justify-center">
-            <div class="relative group">
-              <div class="w-52 h-64 border-2 border-zinc-900 dark:border-zinc-100 p-2 bg-amber-100/60 dark:bg-zinc-800/60 relative overflow-hidden flex flex-col items-center justify-center text-center shadow-md">
-                <img src="WhatsApp Image 2026-09-22 at 23.59.04.jpeg" alt="Ilustrasi Penulis dan Kucing" class="w-full h-48 object-cover border border-zinc-800 dark:border-zinc-200 filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300">
-                <div class="font-hand text-lg mt-2 text-zinc-800 dark:text-zinc-200 rotate-[-1deg] font-bold">
-                  Senn
-                </div>
-              </div>
-              <div class="absolute -bottom-3 -right-3 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs px-2.5 py-1 font-bold border border-zinc-900 dark:border-zinc-100">
-                ADMIN
-              </div>
-            </div>
-          </div>
-
-          <!-- Judul & Info -->
-          <div class="md:col-span-8 space-y-4">
-            <span class="font-mono text-xs uppercase tracking-widest px-2 py-1 border border-zinc-800 dark:border-zinc-200 bg-amber-100 dark:bg-zinc-800">
-              Bab 0 &bull; THE FIRST
-            </span>
-            <h1 class="font-serif text-3xl md:text-5xl font-bold leading-tight">
-              BAB O
-            </h1>
-            <p class="font-mono text-sm text-zinc-600 dark:text-zinc-400">
-              Disusun oleh: <strong class="text-zinc-900 dark:text-zinc-100 font-serif text-base">Senn</strong>
-            </p>
-            <div class="border-l-4 border-zinc-800 dark:border-zinc-200 pl-4 py-1 italic font-serif text-lg text-zinc-700 dark:text-zinc-300">
-              "Banyak orang yang gagal karena mereka tidak tidak memahami usaha yang diperlukan untuk menjadi Sukses"
-            </div>
-            <div class="pt-2 flex flex-wrap gap-3">
-              <a href="#bab1" class="sketch-btn px-4 py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold flex items-center gap-2">
-                <span>Jelajahi Media Sosial</span> &rarr;
-              </a>
-              <a href="#bab3" class="sketch-btn px-4 py-2 border-2 border-zinc-900 dark:border-zinc-100 font-mono text-xs font-bold hover:bg-zinc-200 dark:hover:bg-zinc-800">
-                Kirim Surat
-              </a>
-            </div>
-          </div>
-        </div>
+      <!-- Filter Kategori -->
+      <div class="flex flex-wrap gap-2 w-full md:w-auto">
+        <button class="sketch-btn px-4 py-1.5 bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 text-sm font-medium rounded">
+          Semua
+        </button>
+        <button class="sketch-btn px-4 py-1.5 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 text-sm font-medium rounded">
+          Fiksi
+        </button>
+        <button class="sketch-btn px-4 py-1.5 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 text-sm font-medium rounded">
+          Non-Fiksi
+        </button>
+        <button class="sketch-btn px-4 py-1.5 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 text-sm font-medium rounded">
+          Filsafat
+        </button>
       </div>
     </section>
 
-    <!-- BAB I: JARINGAN MEDIA SOSIAL -->
-    <section id="bab1" class="pt-4 pb-12 border-b-2 border-dashed border-zinc-400 dark:border-zinc-700">
-      <div class="mb-8">
-        <span class="font-mono text-xs uppercase tracking-widest px-2 py-1 border border-zinc-800 dark:border-zinc-200 bg-amber-100 dark:bg-zinc-800">
-          Bab I &bull; Media Sosial
-        </span>
-        <h2 class="font-serif text-3xl font-bold mt-3">Platform Media Sosial</h2>
-        <p class="font-mono text-sm text-zinc-600 dark:text-zinc-400 mt-1">
-          Kunjungi dan Follow Akun Media Sosial resmi Admin di bawah ini.
-        </p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        <!-- Instagram -->
-        <div class="sketch-box p-5 bg-amber-50/60 dark:bg-zinc-900/60 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="p-2 border-2 border-zinc-900 dark:border-zinc-100 bg-amber-100 dark:bg-zinc-800">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-              </div>
-              <span class="font-mono text-xs uppercase px-2 py-0.5 border border-zinc-600 dark:border-zinc-400">Aktif</span>
-            </div>
-            <h3 class="font-serif text-xl font-bold">Instagram</h3>
-            <p class="font-mono text-xs text-zinc-600 dark:text-zinc-400 mt-1 mb-4">@cipuu_senn</p>
+    <!-- Grid Kartu Buku -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+      <!-- Kartu 1 -->
+      <article class="sketch-box bg-white dark:bg-zinc-900 p-5 flex flex-col justify-between">
+        <div>
+          <div class="border-2 border-zinc-800 dark:border-zinc-200 aspect-[3/4] bg-zinc-100 dark:bg-zinc-800 mb-4 flex items-center justify-center overflow-hidden">
+            <span class="font-hand text-2xl text-zinc-400">Sampul Buku</span>
           </div>
-          <a href="https://instagram.com/cipuu_senn?stkn=m52aDF2M3Rqcm5m" target="_blank" class="sketch-btn w-full py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold text-center block">
-            Kunjungi Profil &rarr;
-          </a>
+          <span class="inline-block text-xs uppercase tracking-wider font-semibold px-2 py-0.5 border border-zinc-800 dark:border-zinc-200 mb-2">Fiksi</span>
+          <h2 class="text-xl font-bold mb-1 font-hand">Lelaki Harimau</h2>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-3">Eka Kurniawan</p>
+          <p class="text-sm line-clamp-3 text-zinc-700 dark:text-zinc-300">
+            Kisah tentang Margio yang membunuh Anwar Sadat tanpa motif dendam pribadi melainkan dorongan dari sosok harimau betina di dalam dirinya.
+          </p>
         </div>
+        <div class="mt-4 pt-3 border-t border-dashed border-zinc-400 dark:border-zinc-700 flex justify-between items-center">
+          <span class="font-bold text-sm">Rp 75.000</span>
+          <button class="sketch-btn bg-amber-200 dark:bg-zinc-700 text-xs px-3 py-1 font-semibold">
+            Detail
+          </button>
+        </div>
+      </article>
 
-        <!-- Discord -->
-        <div class="sketch-box p-5 bg-amber-50/60 dark:bg-zinc-900/60 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="p-2 border-2 border-zinc-900 dark:border-zinc-100 bg-amber-100 dark:bg-zinc-800">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-              </div>
-              <span class="font-mono text-xs uppercase px-2 py-0.5 border border-zinc-600 dark:border-zinc-400">Komunitas</span>
-            </div>
-            <h3 class="font-serif text-xl font-bold">Discord</h3>
-            <p class="font-mono text-xs text-zinc-600 dark:text-zinc-400 mt-1 mb-4">kokoh senn</p>
+      <!-- Kartu 2 -->
+      <article class="sketch-box bg-white dark:bg-zinc-900 p-5 flex flex-col justify-between">
+        <div>
+          <div class="border-2 border-zinc-800 dark:border-zinc-200 aspect-[3/4] bg-zinc-100 dark:bg-zinc-800 mb-4 flex items-center justify-center overflow-hidden">
+            <span class="font-hand text-2xl text-zinc-400">Sampul Buku</span>
           </div>
-          <a href="https://discord.com/users/1194130123620884491" target="_blank" class="sketch-btn w-full py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold text-center block">
-            Kunjungi Profil &rarr;
-          </a>
+          <span class="inline-block text-xs uppercase tracking-wider font-semibold px-2 py-0.5 border border-zinc-800 dark:border-zinc-200 mb-2">Filsafat</span>
+          <h2 class="text-xl font-bold mb-1 font-hand">Filosofi Teras</h2>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-3">Henry Manampiring</p>
+          <p class="text-sm line-clamp-3 text-zinc-700 dark:text-zinc-300">
+            Penerapan filsafat Stoisisme dalam kehidupan sehari-hari untuk mengatasi emosi negatif dan membentuk mental tangguh.
+          </p>
         </div>
+        <div class="mt-4 pt-3 border-t border-dashed border-zinc-400 dark:border-zinc-700 flex justify-between items-center">
+          <span class="font-bold text-sm">Rp 98.000</span>
+          <button class="sketch-btn bg-amber-200 dark:bg-zinc-700 text-xs px-3 py-1 font-semibold">
+            Detail
+          </button>
+        </div>
+      </article>
 
-        <!-- Threads -->
-        <div class="sketch-box p-5 bg-amber-50/60 dark:bg-zinc-900/60 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="p-2 border-2 border-zinc-900 dark:border-zinc-100 bg-amber-100 dark:bg-zinc-800">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.186 24c-3.21 0-5.832-.977-7.863-2.928C2.292 19.12 1.272 16.29 1.272 12.63c0-3.722 1.055-6.575 3.138-8.483C6.442 2.238 9.07 1.258 12.247 1.258c3.21 0 5.832.977 7.863 2.928 2.031 1.952 3.051 4.782 3.051 8.442 0 3.722-1.055 6.575-3.138 8.483-2.031 1.91-4.659 2.889-7.837 2.889zm-.122-2.163c2.58 0 4.636-.757 6.162-2.27 1.526-1.513 2.29-3.753 2.29-6.72 0-2.967-.764-5.207-2.29-6.72-1.526-1.513-3.582-2.27-6.162-2.27-2.58 0-4.636.757-6.162 2.27-1.526 1.513-2.29 3.753-2.29 6.72 0 2.967.764 5.207 2.29 6.72 1.526 1.513 3.582 2.27 6.162 2.27z"/></svg>
-              </div>
-              <span class="font-mono text-xs uppercase px-2 py-0.5 border border-zinc-600 dark:border-zinc-400">Pasif</span>
-            </div>
-            <h3 class="font-serif text-xl font-bold">Threads</h3>
-            <p class="font-mono text-xs text-zinc-600 dark:text-zinc-400 mt-1 mb-4">@cipuu_senn</p>
+      <!-- Kartu 3 -->
+      <article class="sketch-box bg-white dark:bg-zinc-900 p-5 flex flex-col justify-between">
+        <div>
+          <div class="border-2 border-zinc-800 dark:border-zinc-200 aspect-[3/4] bg-zinc-100 dark:bg-zinc-800 mb-4 flex items-center justify-center overflow-hidden">
+            <span class="font-hand text-2xl text-zinc-400">Sampul Buku</span>
           </div>
-          <a href="https://threads.com/@cipuu_senn" target="_blank" class="sketch-btn w-full py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold text-center block">
-            Kunjungi Profil &rarr;
-          </a>
+          <span class="inline-block text-xs uppercase tracking-wider font-semibold px-2 py-0.5 border border-zinc-800 dark:border-zinc-200 mb-2">Non-Fiksi</span>
+          <h2 class="text-xl font-bold mb-1 font-hand">Bumi Manusia</h2>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400 mb-3">Pramoedya Ananta Toer</p>
+          <p class="text-sm line-clamp-3 text-zinc-700 dark:text-zinc-300">
+            Perjuangan Minke di era kolonial Hindia Belanda yang menghadapi diskriminasi, cinta, dan pergerakan kebangsaan.
+          </p>
         </div>
-
-        <!-- X (Twitter) -->
-        <div class="sketch-box p-5 bg-amber-50/60 dark:bg-zinc-900/60 flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="p-2 border-2 border-zinc-900 dark:border-zinc-100 bg-amber-100 dark:bg-zinc-800">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-              </div>
-              <span class="font-mono text-xs uppercase px-2 py-0.5 border border-zinc-600 dark:border-zinc-400">Tidak ada</span>
-            </div>
-            <h3 class="font-serif text-xl font-bold">X (Twitter)</h3>
-            <p class="font-mono text-xs text-zinc-600 dark:text-zinc-400 mt-1 mb-4">Belum ada</p>
-          </div>
-          <a href="https://x.com" target="_blank" class="sketch-btn w-full py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold text-center block">
-            Kunjungi Profil &rarr;
-          </a>
+        <div class="mt-4 pt-3 border-t border-dashed border-zinc-400 dark:border-zinc-700 flex justify-between items-center">
+          <span class="font-bold text-sm">Rp 135.000</span>
+          <button class="sketch-btn bg-amber-200 dark:bg-zinc-700 text-xs px-3 py-1 font-semibold">
+            Detail
+          </button>
         </div>
+      </article>
 
-      </div>
     </section>
-
-    <!-- BAB II: BIODATA & RIWAYAT HIDUP -->
-    <section id="bab2" class="pt-4 pb-12 border-b-2 border-dashed border-zinc-400 dark:border-zinc-700">
-      <div class="mb-8">
-        <span class="font-mono text-xs uppercase tracking-widest px-2 py-1 border border-zinc-800 dark:border-zinc-200 bg-amber-100 dark:bg-zinc-800">
-          Bab II &bull; Riwayat Hidup
-        </span>
-        <h2 class="font-serif text-3xl font-bold mt-3">Identitas & Latar Belakang</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Data Pribadi -->
-        <div class="sketch-box p-6 bg-amber-50/50 dark:bg-zinc-900/50">
-          <h3 class="font-serif text-2xl font-bold mb-4 flex items-center gap-2 border-b-2 border-zinc-800 dark:border-zinc-200 pb-2">
-            <span>&bull;</span> Data Pribadi
-          </h3>
-          <dl class="font-mono text-sm space-y-3">
-            <div class="flex justify-between border-b border-dashed border-zinc-300 dark:border-zinc-700 pb-1">
-              <dt class="text-zinc-500">Nama Lengkap:</dt>
-              <dd class="font-bold">Senn</dd>
-            </div>
-            <div class="flex justify-between border-b border-dashed border-zinc-300 dark:border-zinc-700 pb-1">
-              <dt class="text-zinc-500">Profesi / Peran:</dt>
-              <dd class="font-bold">Pelajar & -</dd>
-            </div>
-            <div class="flex justify-between border-b border-dashed border-zinc-300 dark:border-zinc-700 pb-1">
-              <dt class="text-zinc-500">Domisili:</dt>
-              <dd class="font-bold">Indonesia</dd>
-            </div>
-            <div class="flex justify-between border-b border-dashed border-zinc-300 dark:border-zinc-700 pb-1">
-              <dt class="text-zinc-500">Hobi :</dt>
-              <dd class="font-bold">Tidur</dd>
-            </div>
-          </dl>
-        </div>
-
-        <!-- Rekam Jejak -->
-        <div class="sketch-box p-6 bg-amber-50/50 dark:bg-zinc-900/50">
-          <h3 class="font-serif text-2xl font-bold mb-4 flex items-center gap-2 border-b-2 border-zinc-800 dark:border-zinc-200 pb-2">
-            <span>&bull;</span> Rekam Jejak
-          </h3>
-          <ul class="space-y-4 font-mono text-sm">
-            <li class="relative pl-4 border-l-2 border-zinc-800 dark:border-zinc-200">
-              <span class="text-xs text-zinc-500">2026 - Sekarang</span>
-              <p class="font-bold font-serif text-base">Politeknik Negeri Tanah Laut</p>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">Teknologi Rekayasa Komputer Jaringan.</p>
-            </li>
-            <li class="relative pl-4 border-l-2 border-zinc-800 dark:border-zinc-200">
-              <span class="text-xs text-zinc-500">2023 - 2026</span>
-              <p class="font-bold font-serif text-base">SMKN 4 Banjarbaru</p>
-              <p class="text-xs text-zinc-600 dark:text-zinc-400">Rekayasa Perangkat Lunak.</p>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- BAB III: SURAT KEPADA PENULIS & CORETAN MEMO PINGGIR -->
-    <section id="bab3" class="pt-4 pb-16">
-      <div class="mb-8">
-        <span class="font-mono text-xs uppercase tracking-widest px-2 py-1 border border-zinc-800 dark:border-zinc-200 bg-amber-100 dark:bg-zinc-800">
-          Bab III &bull; Pesan Ke Admin & Catatan 
-        </span>
-        <h2 class="font-serif text-3xl font-bold mt-3">Surat &  Catatan</h2>
-      </div>
-
-      <!-- SIDE-BY-SIDE GRID -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-
-        <!-- SISI KIRI: FORM KIRIM SURAT -->
-        <div class="sketch-box p-6 bg-amber-50/80 dark:bg-zinc-900/80 relative">
-          <div class="absolute -top-3 left-6 px-3 bg-amber-100 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold">
-            &boxbox; FORMULIR SURAT
-          </div>
-
-          <h3 class="font-serif text-2xl font-bold mb-4 mt-2 flex items-center gap-2">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-            </svg>
-            Kirim Surat 
-          </h3>
-
-          <form id="letterForm" onsubmit="handleSendLetter(event)" class="space-y-4 font-mono text-sm">
-            <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Nama Pengirim </label>
-              <input type="text" id="senderName" required placeholder="Tuliskan namamu..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
-            </div>
-
-            <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Email Anda</label>
-              <input type="email" id="senderEmail" required placeholder="users@email.com..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
-            </div>
-
-            <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Perihal / Subjek Surat</label>
-              <input type="text" id="letterSubject" required placeholder="Apresiasi, Kolaborasi, Pertanyaan..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100">
-            </div>
-
-            <div>
-              <label class="block font-bold mb-1 text-xs uppercase tracking-wider">Isi Pesan</label>
-              <textarea id="letterBody" rows="4" required placeholder="Tuliskan pesan lengkapmu untuk penulis di sini..." class="w-full p-2.5 bg-transparent border-2 border-zinc-800 dark:border-zinc-200 focus:outline-none focus:ring-2 focus:ring-zinc-900 dark:focus:ring-zinc-100 resize-none"></textarea>
-            </div>
-
-            <button type="submit" class="sketch-btn w-full py-3 px-6 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono font-bold border-2 border-zinc-900 dark:border-zinc-100 flex items-center justify-center gap-2">
-              <span>Kirim Surat</span> &rarr;
-            </button>
-          </form>
-
-          <!-- Toast Notification -->
-          <div id="toastNotification" class="hidden mt-4 p-3 border-2 border-zinc-800 dark:border-zinc-200 bg-amber-200 dark:bg-zinc-800 font-mono text-xs flex items-center justify-between">
-            <span id="toastMessage">Surat telah di kirim ke Admin!</span>
-            <button onclick="hideToast()" class="font-bold px-2">&times;</button>
-          </div>
-        </div>
-
-        <!-- SISI KANAN: CORETAN MEMO PINGGIR -->
-        <div class="sketch-box p-6 bg-amber-100/60 dark:bg-zinc-900/90 relative">
-          <div class="absolute -top-3 left-6 px-3 bg-amber-200 dark:bg-zinc-800 border border-zinc-800 dark:border-zinc-200 font-mono text-xs font-bold">
-            &pen; CORETAN MEMO 
-          </div>
-
-          <div class="flex items-center justify-between mb-4 mt-2">
-            <h3 class="font-serif text-2xl font-bold flex items-center gap-2">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-              </svg>
-            <h3>
-              Memo Margin Buku
-            </h3>
-            <span class="font-hand text-lg text-zinc-600 dark:text-zinc-400 rotate-[-3deg]">*coretan pembaca</span>
-          </div>
-
-          <!-- Input Memo Baru -->
-          <div class="mb-6 p-3 bg-amber-50 dark:bg-zinc-800/80 border border-dashed border-zinc-700 dark:border-zinc-400">
-            <label class="block font-mono text-xs font-bold uppercase mb-1">Tulis Coretan Singkat Anda:</label>
-            <div class="flex gap-2">
-              <input type="text" id="newMemoInput" placeholder="Ketik catatan di pinggir halaman..." class="flex-1 p-2 bg-transparent border border-zinc-600 dark:border-zinc-300 font-hand text-xl focus:outline-none">
-              <button onclick="addMarginMemo()" class="sketch-btn px-4 py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold">
-                Coret
-              </button>
-            </div>
-          </div>
-
-          <!-- Container Memo -->
-          <div id="memoContainer" class="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-            <!-- Disisipkan otomatis via JavaScript -->
-          </div>
-        </div>
-
-      </div>
-    </section>
-
   </main>
 
-  <!-- FOOTER -->
-  <footer class="border-t-2 border-zinc-800 dark:border-zinc-200 py-6 bg-amber-100/40 dark:bg-zinc-950 font-mono text-xs text-center text-zinc-600 dark:text-zinc-400">
-    <div class="max-w-5xl mx-auto px-4">
-      <span class="tracking-widest font-serif font-bold text-sm text-zinc-700 dark:text-zinc-300">&bull; Tamat &bull;</span>
-    </div>
-  </footer>
-
-  <!-- JAVASCRIPT -->
+  <!-- Skrip Sederhana Toggle Dark Mode -->
   <script>
-    // 1. Theme Toggle (Saved in LocalStorage)
-    function applyTheme(isDark) {
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    themeToggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      if (document.documentElement.classList.contains('dark')) {
+        themeIcon.className = 'ph ph-sun';
       } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
+        themeIcon.className = 'ph ph-moon';
       }
-    }
-
-    function toggleTheme() {
-      const isDark = document.documentElement.classList.contains('dark');
-      applyTheme(!isDark);
-    }
-
-    (function initTheme() {
-      const savedTheme = localStorage.getItem('theme');
-      if (savedTheme === 'dark') {
-        applyTheme(true);
-      } else if (savedTheme === 'light') {
-        applyTheme(false);
-      } else {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        applyTheme(prefersDark);
-      }
-    })();
-
-    // Handle Kirim Surat langsung ke senpainpc@gmail.com
-    function handleSendLetter(e) {
-      e.preventDefault();
-
-      const name = document.getElementById('senderName').value;
-      const email = document.getElementById('senderEmail').value;
-      const subject = document.getElementById('letterSubject').value;
-      const body = document.getElementById('letterBody').value;
-
-      // Format isi email
-      const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
-
-      // URL Mailto mengarah ke senpainpc@gmail.com
-      const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
-
-      // Buka aplikasi email pengguna
-      window.location.href = mailtoUrl;
-
-      // Tampilkan notifikasi
-      showToast(`Aplikasi email telah dibuka untuk mengirimkan surat ke Admin!`);
-      document.getElementById('letterForm').reset();
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toastNotification');
-      const toastMsg = document.getElementById('toastMessage');
-      toastMsg.textContent = msg;
-      toast.classList.remove('hidden');
-    }
-
-    function hideToast() {
-      document.getElementById('toastNotification').classList.add('hidden');
-    }
-
-    // 3. Margin Memo Logic
-    const defaultMemos = [
-      { id: 1, text: "Buku yang bagus dibuka dengan rasa ingin tahu dan ditutup dengan pemahaman.", time: "10:15 WIB", author: "Reader #01" },
-      { id: 2, text: "Desain sketsa monokromnya sangat rapi, serasa membaca novel fisik!", time: "14:30 WIB", author: "Kritikus" },
-      { id: 3, text: "Kucingnya sangat menggemaskan di sampul!", time: "18:00 WIB", author: "Pembaca" }
-    ];
-
-    function getStoredMemos() {
-      const saved = localStorage.getItem('margin_memos');
-      return saved ? JSON.parse(saved) : defaultMemos;
-    }
-
-    function renderMemos() {
-      const memos = getStoredMemos();
-      const container = document.getElementById('memoContainer');
-      container.innerHTML = '';
-
-      memos.forEach((memo) => {
-        const memoDiv = document.createElement('div');
-        memoDiv.className = "p-3 bg-amber-50/90 dark:bg-zinc-800/90 border border-zinc-700 dark:border-zinc-300 relative shadow-sm hover:rotate-[0.5deg] transition-transform";
-
-        memoDiv.innerHTML = `
-          <div class="flex items-start justify-between gap-2">
-            <div class="font-hand text-xl text-zinc-900 dark:text-zinc-100 leading-snug">
-              "${escapeHtml(memo.text)}"
-            </div>
-            <button onclick="deleteMemo(${memo.id})" class="text-zinc-400 hover:text-red-500 font-mono text-xs px-1" title="Hapus Memo">&times;</button>
-          </div>
-          <div class="mt-2 flex items-center justify-between font-mono text-[10px] text-zinc-500 dark:text-zinc-400 border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-1">
-            <span>&pen; ${escapeHtml(memo.author || 'Pembaca')}</span>
-            <span>${memo.time}</span>
-          </div>
-        `;
-        container.appendChild(memoDiv);
-      });
-    }
-
-    function addMarginMemo() {
-      const input = document.getElementById('newMemoInput');
-      const text = input.value.trim();
-      if (!text) return;
-
-      const memos = getStoredMemos();
-      const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
-
-      const newMemo = {
-        id: Date.now(),
-        text: text,
-        time: timeStr,
-        author: "Pembaca Baru"
-      };
-
-      memos.unshift(newMemo);
-      localStorage.setItem('margin_memos', JSON.stringify(memos));
-      input.value = '';
-      renderMemos();
-    }
-
-    function deleteMemo(id) {
-      let memos = getStoredMemos();
-      memos = memos.filter(m => m.id !== id);
-      localStorage.setItem('margin_memos', JSON.stringify(memos));
-      renderMemos();
-    }
-
-    function escapeHtml(text) {
-      return text.replace(/[&<>"']/g, function(m) {
-        return {
-          '&': '&amp;',
-          '<': '&lt;',
-          '>': '&gt;',
-          '"': '&quot;',
-          "'": '&#039;'
-        }[m];
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', renderMemos);
+    });
   </script>
 </body>
 </html>
