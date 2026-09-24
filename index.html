@@ -358,11 +358,11 @@
             <span class="font-hand text-lg text-zinc-600 dark:text-zinc-400 rotate-[-3deg]">*coretan pembaca</span>
           </div>
 
-          <!-- Input Memo Baru -->
+          <!-- Input Memo Baru (Ditambahkan penanganan tombol Enter) -->
           <div class="mb-6 p-3 bg-amber-50 dark:bg-zinc-800/80 border border-dashed border-zinc-700 dark:border-zinc-400">
             <label class="block font-mono text-xs font-bold uppercase mb-1">Tulis Coretan Singkat Anda:</label>
             <div class="flex gap-2">
-              <input type="text" id="newMemoInput" placeholder="Ketik catatan di pinggir halaman..." class="flex-1 p-2 bg-transparent border border-zinc-600 dark:border-zinc-300 font-hand text-xl focus:outline-none">
+              <input type="text" id="newMemoInput" onkeypress="handleKeyPress(event)" placeholder="Ketik catatan di pinggir halaman..." class="flex-1 p-2 bg-transparent border border-zinc-600 dark:border-zinc-300 font-hand text-xl focus:outline-none">
               <button onclick="addMarginMemo()" class="sketch-btn px-4 py-2 bg-zinc-900 text-amber-50 dark:bg-zinc-100 dark:text-zinc-900 font-mono text-xs font-bold">
                 Coret
               </button>
@@ -435,7 +435,6 @@
           vinyl.classList.add('[animation-play-state:running]');
           showToast(`🎵 Memutar Musik`);
         }).catch(error => {
-          // Jika diblokir kebijakan autoplay browser, tunggu interaksi pertama
           console.log("Autoplay diblokir browser. Menunggu klik/interaksi pertama pengguna.");
         });
       }
@@ -455,18 +454,15 @@
       }
     }
 
-    // Fungsi Auto Play saat Web Dibuka
+    // Auto Play saat Web Dibuka
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Coba Autoplay langsung
       playAudioAndSpin();
 
-      // 2. Cadangan: Putar pada interaksi/klik pertama jika browser memblokir autoplay awal
       const triggerAudioOnFirstTouch = () => {
         const music = document.getElementById('bgMusic');
         if (music.paused) {
           playAudioAndSpin();
         }
-        // Hapus event listener agar tidak terus-terusan berjalan
         document.removeEventListener('click', triggerAudioOnFirstTouch);
         document.removeEventListener('touchstart', triggerAudioOnFirstTouch);
         document.removeEventListener('keydown', triggerAudioOnFirstTouch);
@@ -511,7 +507,6 @@
       const body = document.getElementById('letterBody').value;
 
       const fullBody = `Pengirim: ${name}\nEmail Kontak: ${email}\n\nIsi Surat:\n${body}`;
-
       const mailtoUrl = `mailto:senpainpc@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(fullBody)}`;
 
       window.location.href = mailtoUrl;
@@ -565,7 +560,7 @@
 
       const memos = getStoredMemos();
       const now = new Date();
-      const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} WIB`;
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')} WIB`;
 
       const newMemo = {
         id: Date.now(),
@@ -589,8 +584,14 @@
       showToast('Coretan dihapus.');
     }
 
+    function handleKeyPress(event) {
+      if (event.key === 'Enter') {
+        addMarginMemo();
+      }
+    }
+
     function escapeHtml(text) {
-      return text.replace(/[&<>"']/g, function(m) {
+      return String(text).replace(/[&<>"']/g, function(m) {
         return {
           '&': '&amp;',
           '<': '&lt;',
